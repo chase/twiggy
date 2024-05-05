@@ -347,13 +347,7 @@ impl Items {
 
     /// Get an item with the given name.
     pub fn get_item_by_name(&self, name: &str) -> Option<&Item> {
-        for item in self.iter() {
-            if item.name() == name {
-                return Some(item);
-            }
-        }
-
-        None // Return `None` if `name` did not match any items.
+        self.iter().find(|&item| item.name() == name) // Return `None` if `name` did not match any items.
     }
 }
 
@@ -529,10 +523,7 @@ pub enum ItemKind {
 impl ItemKind {
     /// Returns true if `self` is the `Data` variant
     pub fn is_data(&self) -> bool {
-        match self {
-            ItemKind::Data(_) => true,
-            _ => false,
-        }
+        matches!(self, ItemKind::Data(_))
     }
 }
 
@@ -570,9 +561,9 @@ pub struct Code {
 impl Code {
     /// Construct a new IR item for executable code.
     pub fn new(name: &str) -> Code {
-        let demangled = Self::demangle(&name);
+        let demangled = Self::demangle(name);
         let monomorphization_of =
-            Self::extract_generic_function(demangled.as_ref().map(|s| s.as_str()).unwrap_or(name));
+            Self::extract_generic_function(demangled.as_deref().unwrap_or(name));
         Code {
             demangled,
             monomorphization_of,
@@ -581,13 +572,13 @@ impl Code {
 
     /// Get the demangled name of this function, if any.
     pub fn demangled(&self) -> Option<&str> {
-        self.demangled.as_ref().map(|s| s.as_str())
+        self.demangled.as_deref()
     }
 
     /// Get the name of the generic function that this is a monomorphization of,
     /// if any.
     pub fn monomorphization_of(&self) -> Option<&str> {
-        self.monomorphization_of.as_ref().map(|s| s.as_str())
+        self.monomorphization_of.as_deref()
     }
 
     fn demangle(s: &str) -> Option<String> {

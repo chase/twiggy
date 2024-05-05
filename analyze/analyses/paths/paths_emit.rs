@@ -139,22 +139,27 @@ mod emit_text_helpers {
             name,
         });
 
-        if depth < opts.max_depth() {
-            // Process each child entry, and chain together the resulting iterators.
-            let children_iter = entry
-                .children
-                .iter()
-                .take(paths)
-                .flat_map(move |child_entry| {
-                    process_entry(child_entry, depth + 1, paths, items, opts)
-                });
-            Box::new(row_iter.chain(children_iter))
-        } else if depth == opts.max_depth() {
-            // TODO: Create a summary row, and chain it to the row iterator.
-            Box::new(row_iter)
-        } else {
-            // If we are beyond the maximum depth, return an empty iterator.
-            Box::new(iter::empty())
+        match depth.cmp(&opts.max_depth()) {
+            std::cmp::Ordering::Less => {
+                // Process each child entry, and chain together the resulting iterators.
+                let children_iter =
+                    entry
+                        .children
+                        .iter()
+                        .take(paths)
+                        .flat_map(move |child_entry| {
+                            process_entry(child_entry, depth + 1, paths, items, opts)
+                        });
+                Box::new(row_iter.chain(children_iter))
+            }
+            std::cmp::Ordering::Equal => {
+                // TODO: Create a summary row, and chain it to the row iterator.
+                Box::new(row_iter)
+            }
+            std::cmp::Ordering::Greater => {
+                // If we are beyond the maximum depth, return an empty iterator.
+                Box::new(iter::empty())
+            }
         }
     }
 
@@ -263,22 +268,27 @@ mod emit_csv_helpers {
             path,
         });
 
-        if depth < opts.max_depth() {
-            // Process each child entry, and chain together the resulting iterators.
-            let children_iter = entry
-                .children
-                .iter()
-                .take(paths)
-                .flat_map(move |child_entry| {
-                    process_entry(child_entry, depth + 1, paths, items, opts)
-                });
-            Box::new(record_iter.chain(children_iter))
-        } else if depth == opts.max_depth() {
-            // Create a summary row, and chain it to the row iterator.
-            Box::new(record_iter)
-        } else {
-            // If we are beyond the maximum depth, return an empty iterator.
-            Box::new(iter::empty())
+        match depth.cmp(&opts.max_depth()) {
+            std::cmp::Ordering::Less => {
+                // Process each child entry, and chain together the resulting iterators.
+                let children_iter =
+                    entry
+                        .children
+                        .iter()
+                        .take(paths)
+                        .flat_map(move |child_entry| {
+                            process_entry(child_entry, depth + 1, paths, items, opts)
+                        });
+                Box::new(record_iter.chain(children_iter))
+            }
+            std::cmp::Ordering::Equal => {
+                // Create a summary row, and chain it to the row iterator.
+                Box::new(record_iter)
+            }
+            std::cmp::Ordering::Greater => {
+                // If we are beyond the maximum depth, return an empty iterator.
+                Box::new(iter::empty())
+            }
         }
     }
 

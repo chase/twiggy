@@ -1,7 +1,6 @@
 use super::FallilbleOption;
 use anyhow::anyhow;
 use fallible_iterator::FallibleIterator;
-use gimli;
 
 /// This struct holds the values for DWARF attributes related to an object's
 /// location in a binary. This is intended to help consolidate the error

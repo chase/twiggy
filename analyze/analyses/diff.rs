@@ -132,11 +132,7 @@ pub fn diff(
     // Given a result returned by `get_item_delta`, return false if the result
     // represents an unchanged item. Ignore errors, these are handled separately.
     let unchanged_items_filter = |res: &anyhow::Result<DiffEntry>| -> bool {
-        if let Ok(DiffEntry { delta: 0, .. }) = res {
-            false
-        } else {
-            true
-        }
+        !matches!(res, Ok(DiffEntry { delta: 0, .. }))
     };
 
     // Create a set of item names from the new and old item collections.

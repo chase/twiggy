@@ -31,13 +31,7 @@ fn collect_monomorphizations<'a>(
 
     let unsorted_monos: BTreeMap<&'a str, BTreeSet<(String, u32)>> = items
         .iter()
-        .filter_map(|item| {
-            if let Some(generic) = item.monomorphization_of() {
-                Some((generic, item))
-            } else {
-                None
-            }
-        })
+        .filter_map(|item| item.monomorphization_of().map(|generic| (generic, item)))
         .filter(|(generic, _)| match (args_given, using_regexps) {
             (true, true) => regexps.is_match(generic),
             (true, false) => opts.functions().iter().any(|name| name == generic),

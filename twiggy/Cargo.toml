@@ -18,10 +18,10 @@ path = "./twiggy.rs"
 
 [dependencies]
 anyhow = "1.0"
-structopt = "0.3"
+structopt = "0.3.26"
 twiggy-analyze = { version = "=0.7.0", path = "../analyze" }
 twiggy-ir = { version = "=0.7.0", path = "../ir" }
-twiggy-opt = { version = "=0.7.0", path = "../opt", features = ["cli"] }
+twiggy-opt = { version = "=0.7.0", path = "../opt" }
 twiggy-parser = { version = "=0.7.0", path = "../parser" }
 twiggy-traits = { version = "=0.7.0", path = "../traits" }
 

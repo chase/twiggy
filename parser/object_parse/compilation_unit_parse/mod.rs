@@ -1,6 +1,6 @@
 use super::die_parse;
 use anyhow::anyhow;
-use gimli;
+
 use twiggy_ir as ir;
 
 pub(super) fn parse_items<R: gimli::Reader>(

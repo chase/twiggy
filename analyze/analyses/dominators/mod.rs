@@ -40,7 +40,7 @@ pub fn dominators(
         let regexps = regex::RegexSet::new(arguments)?;
         let mut sorted_items: Vec<_> = items
             .iter()
-            .filter(|item| regexps.is_match(&item.name()))
+            .filter(|item| regexps.is_match(item.name()))
             .map(|item| item.id())
             .collect();
         sorted_items.sort_by_key(|id| -i64::from(items.retained_size(*id)));
@@ -67,7 +67,7 @@ fn summarize_unreachable_items(
     items: &mut ir::Items,
     opts: &opt::Dominators,
 ) -> Option<UnreachableItemsSummary> {
-    let (size, count) = garbage::get_unreachable_items(&items)
+    let (size, count) = garbage::get_unreachable_items(items)
         .map(|item| item.size())
         .fold((0, 0), |(s, c), curr| (s + curr, c + 1));
     if opts.items().is_empty() && size > 0 {

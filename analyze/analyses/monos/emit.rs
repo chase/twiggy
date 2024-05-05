@@ -25,10 +25,10 @@ impl traits::Emit for Monos {
 
         // Given an entry representing a generic function and its various
         // monomorphizations, return a vector of table rows.
-        fn process_entry<'a>(
-            entry: &'a MonosEntry,
+        fn process_entry(
+            entry: &MonosEntry,
             total_size: f64,
-        ) -> impl Iterator<Item = TableRow> + 'a {
+        ) -> impl Iterator<Item = TableRow> + '_ {
             let MonosEntry {
                 name,
                 insts,

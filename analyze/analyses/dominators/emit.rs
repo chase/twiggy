@@ -23,14 +23,14 @@ impl traits::Emit for DominatorTree {
         ]);
 
         let opts = &self.opts;
-        let mut row = 0 as u32;
+        let mut row = 0_u32;
 
         fn recursive_add_rows(
             table: &mut Table,
             items: &ir::Items,
             dominator_tree: &BTreeMap<ir::Id, Vec<ir::Id>>,
             depth: u32,
-            mut row: &mut u32,
+            row: &mut u32,
             opts: &opt::Dominators,
             id: ir::Id,
         ) {
@@ -46,18 +46,11 @@ impl traits::Emit for DominatorTree {
 
             if let Some(children) = dominator_tree.get(&id) {
                 let mut children = children.to_vec();
-                children.sort_by(|a, b| items.retained_size(*b).cmp(&items.retained_size(*a)));
+                children.sort_by_key(|b| std::cmp::Reverse(items.retained_size(*b)));
+                // children.sort_by(|a, b| items.retained_size(*b).cmp(&items.retained_size(*a)));
                 for child in children {
                     *row += 1;
-                    recursive_add_rows(
-                        table,
-                        items,
-                        dominator_tree,
-                        depth + 1,
-                        &mut row,
-                        &opts,
-                        child,
-                    );
+                    recursive_add_rows(table, items, dominator_tree, depth + 1, row, opts, child);
                 }
             }
         }
@@ -70,7 +63,7 @@ impl traits::Emit for DominatorTree {
                 &self.tree,
                 start_depth,
                 &mut row,
-                &opts,
+                opts,
                 *id,
             );
         }
@@ -96,7 +89,7 @@ impl traits::Emit for DominatorTree {
     fn emit_json(&self, items: &ir::Items, dest: &mut dyn io::Write) -> anyhow::Result<()> {
         fn recursive_add_children(
             items: &ir::Items,
-            opts: &opt::Dominators,
+            _opts: &opt::Dominators,
             dominator_tree: &BTreeMap<ir::Id, Vec<ir::Id>>,
             id: ir::Id,
             obj: &mut json::Object,
@@ -105,12 +98,12 @@ impl traits::Emit for DominatorTree {
 
             if let Some(children) = dominator_tree.get(&id) {
                 let mut children = children.to_vec();
-                children.sort_by(|a, b| items.retained_size(*b).cmp(&items.retained_size(*a)));
+                children.sort_by_key(|b| std::cmp::Reverse(items.retained_size(*b)));
 
                 let mut arr = obj.array("children")?;
                 for child in children {
                     let mut obj = arr.object()?;
-                    recursive_add_children(items, opts, dominator_tree, child, &mut obj)?;
+                    recursive_add_children(items, _opts, dominator_tree, child, &mut obj)?;
                 }
             }
 
@@ -148,7 +141,7 @@ impl traits::Emit for DominatorTree {
     fn emit_csv(&self, items: &ir::Items, dest: &mut dyn io::Write) -> anyhow::Result<()> {
         fn recursive_add_children(
             items: &ir::Items,
-            opts: &opt::Dominators,
+            _opts: &opt::Dominators,
             dominator_tree: &BTreeMap<ir::Id, Vec<ir::Id>>,
             id: ir::Id,
             wtr: &mut csv::Writer<&mut dyn io::Write>,
@@ -156,9 +149,9 @@ impl traits::Emit for DominatorTree {
             add_csv_item(items, id, wtr)?;
             if let Some(children) = dominator_tree.get(&id) {
                 let mut children = children.to_vec();
-                children.sort_by(|a, b| items.retained_size(*b).cmp(&items.retained_size(*a)));
+                children.sort_by_key(|b| std::cmp::Reverse(items.retained_size(*b)));
                 for child in children {
-                    recursive_add_children(items, opts, dominator_tree, child, wtr)?;
+                    recursive_add_children(items, _opts, dominator_tree, child, wtr)?;
                 }
             }
             Ok(())

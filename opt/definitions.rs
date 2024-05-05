@@ -44,27 +44,22 @@ pub enum Options {
 }
 
 /// List the top code size offenders in a binary.
-#[wasm_bindgen]
 #[derive(Clone, Debug)]
 #[derive(StructOpt)]
 pub struct Top {
     /// The path to the input binary to size profile.
-    #[cfg(feature = "cli")]
     #[structopt(parse(from_os_str))]
     input: path::PathBuf,
 
     /// The parse mode for the input binary data.
-    #[cfg(feature = "cli")]
     #[structopt(long = "mode", default_value = "auto")]
     parse_mode: traits::ParseMode,
 
     /// The destination to write the output to. Defaults to `stdout`.
-    #[cfg(feature = "cli")]
     #[structopt(short = "o", default_value = "-")]
     output_destination: OutputDestination,
 
     /// The format the output should be written in.
-    #[cfg(feature = "cli")]
     #[structopt(short = "f", long = "format", default_value = "text")]
     output_format: traits::OutputFormat,
 
@@ -84,13 +79,9 @@ pub struct Top {
 impl Default for Top {
     fn default() -> Top {
         Top {
-            #[cfg(feature = "cli")]
             input: Default::default(),
-            #[cfg(feature = "cli")]
             parse_mode: Default::default(),
-            #[cfg(feature = "cli")]
             output_destination: Default::default(),
-            #[cfg(feature = "cli")]
             output_format: Default::default(),
 
             max_items: 4_294_967_295,
@@ -100,7 +91,6 @@ impl Default for Top {
     }
 }
 
-#[wasm_bindgen]
 impl Top {
     /// Construct a new, default `Top`.
     pub fn new() -> Top {
@@ -139,27 +129,22 @@ impl Top {
 }
 
 /// Compute and display the dominator tree for a binary's call graph.
-#[wasm_bindgen]
 #[derive(Clone, Debug, Default)]
 #[derive(StructOpt)]
 pub struct Dominators {
     /// The path to the input binary to size profile.
-    #[cfg(feature = "cli")]
     #[structopt(parse(from_os_str))]
     input: path::PathBuf,
 
     /// The parse mode for the input binary data.
-    #[cfg(feature = "cli")]
     #[structopt(long = "mode", default_value = "auto")]
     parse_mode: traits::ParseMode,
 
     /// The destination to write the output to. Defaults to `stdout`.
-    #[cfg(feature = "cli")]
     #[structopt(short = "o", default_value = "-")]
     output_destination: OutputDestination,
 
     /// The format the output should be written in.
-    #[cfg(feature = "cli")]
     #[structopt(short = "f", long = "format", default_value = "text")]
     output_format: traits::OutputFormat,
 
@@ -189,7 +174,6 @@ impl Dominators {
     }
 }
 
-#[wasm_bindgen]
 impl Dominators {
     /// Construct a new, default `Dominators`.
     pub fn new() -> Dominators {
@@ -229,27 +213,22 @@ impl Dominators {
 
 /// Find and display the call paths to a function in the given binary's call
 /// graph.
-#[wasm_bindgen]
 #[derive(Clone, Debug)]
 #[derive(StructOpt)]
 pub struct Paths {
     /// The path to the input binary to size profile.
-    #[cfg(feature = "cli")]
     #[structopt(parse(from_os_str))]
     input: path::PathBuf,
 
     /// The parse mode for the input binary data.
-    #[cfg(feature = "cli")]
     #[structopt(long = "mode", default_value = "auto")]
     parse_mode: traits::ParseMode,
 
     /// The destination to write the output to. Defaults to `stdout`.
-    #[cfg(feature = "cli")]
     #[structopt(short = "o", default_value = "-")]
     output_destination: OutputDestination,
 
     /// The format the output should be written in.
-    #[cfg(feature = "cli")]
     #[structopt(short = "f", long = "format", default_value = "text")]
     output_format: traits::OutputFormat,
 
@@ -276,13 +255,9 @@ pub struct Paths {
 impl Default for Paths {
     fn default() -> Paths {
         Paths {
-            #[cfg(feature = "cli")]
             input: Default::default(),
-            #[cfg(feature = "cli")]
             parse_mode: Default::default(),
-            #[cfg(feature = "cli")]
             output_destination: Default::default(),
-            #[cfg(feature = "cli")]
             output_format: Default::default(),
 
             functions: Default::default(),
@@ -295,16 +270,12 @@ impl Default for Paths {
 }
 
 impl Paths {
-    // TODO: wasm-bindgen doesn't support sending Vec<String> across the wasm
-    // ABI boundary yet.
-
     /// The functions to find call paths to.
     pub fn functions(&self) -> &[String] {
         &self.functions
     }
 }
 
-#[wasm_bindgen]
 impl Paths {
     /// Construct a new, default `Paths`.
     pub fn new() -> Paths {
@@ -359,12 +330,10 @@ impl Paths {
 
 /// List the generic function monomorphizations that are contributing to
 /// code bloat.
-#[wasm_bindgen]
 #[derive(Clone, Debug)]
 #[derive(StructOpt)]
 pub struct Monos {
     /// The path to the input binary to size profile.
-    #[cfg(feature = "cli")]
     #[structopt(parse(from_os_str))]
     input: path::PathBuf,
 
@@ -373,17 +342,14 @@ pub struct Monos {
     functions: Vec<String>,
 
     /// The parse mode for the input binary data.
-    #[cfg(feature = "cli")]
     #[structopt(short = "d", long = "mode", default_value = "auto")]
     parse_mode: traits::ParseMode,
 
     /// The destination to write the output to. Defaults to `stdout`.
-    #[cfg(feature = "cli")]
     #[structopt(short = "o", default_value = "-")]
     output_destination: OutputDestination,
 
     /// The format the output should be written in.
-    #[cfg(feature = "cli")]
     #[structopt(short = "f", long = "format", default_value = "text")]
     output_format: traits::OutputFormat,
 
@@ -423,13 +389,9 @@ pub struct Monos {
 impl Default for Monos {
     fn default() -> Monos {
         Monos {
-            #[cfg(feature = "cli")]
             input: Default::default(),
-            #[cfg(feature = "cli")]
             parse_mode: Default::default(),
-            #[cfg(feature = "cli")]
             output_destination: Default::default(),
-            #[cfg(feature = "cli")]
             output_format: Default::default(),
 
             functions: Default::default(),
@@ -448,16 +410,12 @@ impl Default for Monos {
 }
 
 impl Monos {
-    // TODO: wasm-bindgen doesn't support sending Vec<String> across the wasm
-    // ABI boundary yet.
-
     /// The functions to find call paths to.
     pub fn functions(&self) -> &[String] {
         &self.functions
     }
 }
 
-#[wasm_bindgen]
 impl Monos {
     /// Construct a new, default `Monos`.
     pub fn new() -> Monos {
@@ -522,32 +480,26 @@ impl Monos {
 }
 
 /// Diff the old and new versions of a binary to see what sizes changed.
-#[wasm_bindgen]
 #[derive(Clone, Debug)]
 #[derive(StructOpt)]
 pub struct Diff {
     /// The path to the old version of the input binary.
-    #[cfg(feature = "cli")]
     #[structopt(parse(from_os_str))]
     old_input: path::PathBuf,
 
     /// The parse mode for the input binary data.
-    #[cfg(feature = "cli")]
     #[structopt(long = "mode", default_value = "auto")]
     parse_mode: traits::ParseMode,
 
     /// The path to the new version of the input binary.
-    #[cfg(feature = "cli")]
     #[structopt(parse(from_os_str))]
     new_input: path::PathBuf,
 
     /// The destination to write the output to. Defaults to `stdout`.
-    #[cfg(feature = "cli")]
     #[structopt(short = "o", default_value = "-")]
     output_destination: OutputDestination,
 
     /// The format the output should be written in.
-    #[cfg(feature = "cli")]
     #[structopt(short = "f", long = "format", default_value = "text")]
     output_format: traits::OutputFormat,
 
@@ -570,15 +522,10 @@ pub struct Diff {
 impl Default for Diff {
     fn default() -> Diff {
         Diff {
-            #[cfg(feature = "cli")]
             old_input: Default::default(),
-            #[cfg(feature = "cli")]
             parse_mode: Default::default(),
-            #[cfg(feature = "cli")]
             new_input: Default::default(),
-            #[cfg(feature = "cli")]
             output_destination: Default::default(),
-            #[cfg(feature = "cli")]
             output_format: Default::default(),
 
             items: Default::default(),
@@ -590,16 +537,12 @@ impl Default for Diff {
 }
 
 impl Diff {
-    // TODO: wasm-bindgen does not support sending Vec<String> across
-    // the wasm ABI boundary yet.
-
     /// The items whose dominators subtree should be printed.
     pub fn items(&self) -> &[String] {
         &self.items
     }
 }
 
-#[wasm_bindgen]
 impl Diff {
     /// The maximum number of items to display.
     pub fn max_items(&self) -> u32 {
@@ -629,27 +572,22 @@ impl Diff {
 
 /// Find and display code and data that is not transitively referenced by any
 /// exports or public functions.
-#[wasm_bindgen]
 #[derive(Clone, Debug)]
 #[derive(StructOpt)]
 pub struct Garbage {
     /// The path to the input binary to size profile.
-    #[cfg(feature = "cli")]
     #[structopt(parse(from_os_str))]
     input: path::PathBuf,
 
     /// The parse mode for the input binary data.
-    #[cfg(feature = "cli")]
     #[structopt(long = "mode", default_value = "auto")]
     parse_mode: traits::ParseMode,
 
     /// The destination to write the output to. Defaults to `stdout`.
-    #[cfg(feature = "cli")]
     #[structopt(short = "o", default_value = "-")]
     output_destination: OutputDestination,
 
     /// The format the output should be written in.
-    #[cfg(feature = "cli")]
     #[structopt(short = "f", long = "format", default_value = "text")]
     output_format: traits::OutputFormat,
 
@@ -669,13 +607,9 @@ pub struct Garbage {
 impl Default for Garbage {
     fn default() -> Garbage {
         Garbage {
-            #[cfg(feature = "cli")]
             input: Default::default(),
-            #[cfg(feature = "cli")]
             parse_mode: Default::default(),
-            #[cfg(feature = "cli")]
             output_destination: Default::default(),
-            #[cfg(feature = "cli")]
             output_format: Default::default(),
 
             max_items: 10,
@@ -685,7 +619,6 @@ impl Default for Garbage {
     }
 }
 
-#[wasm_bindgen]
 impl Garbage {
     /// Construct a new, default `Garbage`
     pub fn new() -> Garbage {

@@ -144,8 +144,8 @@ impl traits::Emit for Garbage {
 
 /// Find items that are not transitively referenced by any exports or public functions.
 pub fn garbage(items: &ir::Items, opts: &opt::Garbage) -> anyhow::Result<Box<dyn traits::Emit>> {
-    let mut unreachable_items = get_unreachable_items(&items).collect::<Vec<_>>();
-    unreachable_items.sort_by(|a, b| b.size().cmp(&a.size()));
+    let mut unreachable_items = get_unreachable_items(items).collect::<Vec<_>>();
+    unreachable_items.sort_by_key(|b| std::cmp::Reverse(b.size()));
 
     // Split the items into two categories if necessary
     let (data_segments, items_non_data) = if opts.show_data_segments() {

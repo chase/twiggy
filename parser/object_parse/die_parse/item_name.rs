@@ -1,5 +1,4 @@
 use super::FallilbleOption;
-use gimli;
 
 /// Calculate the item's name. If no name was assigned, a name will be
 /// decided elsewhere using the `ir::ItemKind` variant that was determined

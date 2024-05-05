@@ -1,4 +1,3 @@
-use gimli;
 use twiggy_ir as ir;
 mod item_name;
 mod location_attrs;

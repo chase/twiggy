@@ -46,7 +46,7 @@ fn get_starting_positions(items: &ir::Items, opts: &opt::Paths) -> anyhow::Resul
             .iter()
             .filter(|item| item.id() != items.meta_root())
             .collect::<Vec<_>>();
-        sorted_items.sort_by(|a, b| b.size().cmp(&a.size()));
+        sorted_items.sort_by_key(|b| std::cmp::Reverse(b.size()));
         sorted_items.iter().map(|item| item.id()).collect()
     };
 
@@ -56,7 +56,7 @@ fn get_starting_positions(items: &ir::Items, opts: &opt::Paths) -> anyhow::Resul
             .neighbors(items.meta_root())
             .map(|id| &items[id])
             .collect::<Vec<_>>();
-        roots.sort_by(|a, b| b.size().cmp(&a.size()));
+        roots.sort_by_key(|b| std::cmp::Reverse(b.size()));
         roots.into_iter().map(|item| item.id()).collect()
     };
 

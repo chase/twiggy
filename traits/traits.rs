@@ -19,6 +19,7 @@ pub trait Analyze {
 
 /// Selects the parse mode for the input data.
 #[derive(Clone, Copy, Debug)]
+#[derive(Default)]
 pub enum ParseMode {
     /// WebAssembly file parse mode.
     Wasm,
@@ -26,13 +27,8 @@ pub enum ParseMode {
     #[cfg(feature = "dwarf")]
     Dwarf,
     /// Automatically determined mode of parsing, e.g. based on file extension.
+    #[default]
     Auto,
-}
-
-impl Default for ParseMode {
-    fn default() -> ParseMode {
-        ParseMode::Auto
-    }
 }
 
 impl FromStr for ParseMode {
@@ -50,10 +46,11 @@ impl FromStr for ParseMode {
 }
 
 /// The format of the output.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Default)]
 pub enum OutputFormat {
     /// Human readable text.
     #[cfg(feature = "emit_text")]
+    #[default]
     Text,
 
     // /// Hyper Text Markup Language.
@@ -67,15 +64,6 @@ pub enum OutputFormat {
     /// JavaScript Object Notation format.
     #[cfg(feature = "emit_json")]
     Json,
-}
-
-#[cfg(feature = "emit_text")]
-#[cfg(feature = "emit_csv")]
-#[cfg(feature = "emit_json")]
-impl Default for OutputFormat {
-    fn default() -> OutputFormat {
-        OutputFormat::Text
-    }
 }
 
 impl FromStr for OutputFormat {
