@@ -1,9 +1,0 @@
-[package]
-name = "job_runner"
-version = "0.1.0"
-edition = "2018"
-
-[dependencies]
-rustop = "1.1"
-cargo_toml = "0.13"
-anyhow = "1.0"

@@ -19,7 +19,6 @@
         - [`twiggy diff`](./usage/command-line-interface/diff.md)
         - [`twiggy garbage`](./usage/command-line-interface/garbage.md)
     - [🦀 As a Crate](./usage/as-a-crate.md)
-    - [🕸 On the Web with WebAssembly](./usage/on-the-web-with-webassembly.md)
 - [🔎 Supported Binary Formats](./supported-binary-formats.md)
 
 --------------------------------------------------------------------------------
