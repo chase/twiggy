@@ -13,11 +13,9 @@ jobs:
   lints:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          components: rustfmt, clippy
+      - uses: actions/checkout@v4
+      - name: Install Rust
+        run: rustup update stable && rustup default stable && rustup component add rustfmt clippy
       - uses: actions-rs/cargo@v1
         with:
           command: fmt
